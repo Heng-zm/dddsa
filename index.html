@@ -3,71 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Remote Touchpad</title>
+    <title>Screen Sharing</title>
     <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-        }
-        #touchpad {
-            width: 100vw;
-            height: 100vh;
-            background-color: #f0f0f0;
-            touch-action: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        #status {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
-            font-size: 14px;
-        }
+        body { display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        img { max-width: 100%; max-height: 100%; }
     </style>
 </head>
 <body>
-    <div id="status">Touchpad ready</div>
-    <div id="touchpad"></div>
-
-    <script>
-        const touchpad = document.getElementById('touchpad');
-        const status = document.getElementById('status');
-        let lastX = 0;
-        let lastY = 0;
-
-        touchpad.addEventListener('touchmove', (event) => {
-            const touch = event.touches[0];
-            const deltaX = touch.clientX - lastX;
-            const deltaY = touch.clientY - lastY;
-            lastX = touch.clientX;
-            lastY = touch.clientY;
-
-            // Update status
-            status.textContent = `Moved: ΔX=${deltaX}, ΔY=${deltaY}`;
-
-            // Send movement to server
-            fetch('http://<PC_IP>:5000/mouse/move', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ x: deltaX, y: deltaY }),
-            }).catch(console.error);
-        });
-
-        touchpad.addEventListener('touchstart', (event) => {
-            const touch = event.touches[0];
-            lastX = touch.clientX;
-            lastY = touch.clientY;
-            status.textContent = 'Touch started';
-        });
-
-        touchpad.addEventListener('touchend', () => {
-            status.textContent = 'Touch ended';
-        });
-    </script>
+    <img src="http://localhost:8000/stream" alt="Screen Stream">
 </body>
 </html>
